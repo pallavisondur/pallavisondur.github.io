@@ -7,7 +7,52 @@ document.addEventListener('DOMContentLoaded', () => {
     initBlogReaderDrawer();
     initNavHighlighting();
     initAmbientParallax();
+    initMobileNav();
 });
+
+/**
+ * Mobile Hamburger Navigation
+ */
+function initMobileNav() {
+    const hamburger = document.getElementById('nav-hamburger');
+    const overlay = document.getElementById('mobile-nav-overlay');
+    const closeBtn = document.getElementById('mobile-nav-close');
+    const mobileLinks = overlay ? overlay.querySelectorAll('.mobile-nav-link, .mobile-nav-cta') : [];
+
+    if (!hamburger || !overlay) return;
+
+    function openMenu() {
+        hamburger.classList.add('open');
+        overlay.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+        hamburger.classList.remove('open');
+        overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', () => {
+        overlay.classList.contains('active') ? closeMenu() : openMenu();
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+
+    // Close on link click
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+            closeMenu();
+        }
+    });
+}
 
 /**
  * Extended CV Tab Switcher
